@@ -1,0 +1,33 @@
+{
+	"extends": [
+		"airbnb-base",
+		"prettier",
+		"prettier/react",
+		"plugin:import/errors",
+		"plugin:react/recomended",
+		"plugin:jsx-a11y/recommended",
+		"plugin:react-hooks/recommended"
+	],
+	"plugins": ["import", "jsx-a11y", "react"],
+	"parserOptions": {
+		"ecmaVersion": 2020,
+		"sourceType": "module",
+		"ecmaFeatures": {
+			"jsx": true
+		}
+	},
+	"env": {
+		"es6": true,
+		"browser": true,
+		"node": true
+	},
+	"rules": {
+        "no-var": 2,
+        "no-console": 0
+	},
+	"settings": {
+		"react": {
+			"version": "detect"
+		}
+	}
+}
