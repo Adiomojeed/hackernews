@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
 import { css } from "@emotion/core";
 import Table from "./Table";
+import Search from "./Search";
 
-const DEFAULT_QUERY = "redux";
-const PATH_BASE = "https://hn.algolia.com/api/v1";
-const PATH_SEARCH = "/search";
-const PARAM_SEARCH = "query=";
+const DEFAULT_QUERY = "react";
+const PATH = "https://hn.algolia.com/api/v1/search?query=";
+const PARAM_PAGE = "page="
 
 class HackerNews extends Component {
 	constructor(props) {
@@ -15,22 +15,51 @@ class HackerNews extends Component {
 		this.state = {
 			result: null,
 			searchTerm: DEFAULT_QUERY,
+			page: 0
 		};
 
-		this.onSearchChange = this.onSearchChange.bind(this);
+		this.setStory = this.setStory.bind(this);
+		this.fetchTopstories = this.fetchTopstories.bind(this);
+		this.HandleSearch = this.HandleSearch.bind(this);
+		this.HandleChange = this.HandleChange.bind(this);
 		this.onDismiss = this.onDismiss.bind(this);
+		this.handleNext = this.handleNext.bind(this)
+		this.handlePrev = this.handlePrev.bind(this)
 	}
 
-	componentDidMount() {
-		const { searchTerm } = this.state;
-		fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
+	setStory(result) {
+		this.setState({ result: result });
+	}
+	fetchTopstories(searchTerm, page) {
+		fetch(`${PATH}${searchTerm}&${PARAM_PAGE}${page}`)
 			.then((response) => response.json())
-			.then((result) => this.setState({ result: result.hits }))
+			.then((result) => this.setStory(result.hits))
 			.catch((error) => error);
 	}
+	componentDidMount() {
+		const { searchTerm, page } = this.state;
+		this.fetchTopstories(searchTerm, page);
+	}
+	handleNext () {
+		const {searchTerm, page} = this.state
+		this.fetchTopstories(searchTerm, page+1)
+		this.setState({page: page+1})
+	}
+	handlePrev () {
+		const {searchTerm, page} = this.state
+		const newPage = page === 0 ? 0 : page-1
+		this.fetchTopstories(searchTerm, newPage)
+		this.setState({page: newPage})
+	}
 
-	onSearchChange(event) {
+	HandleChange(event) {
 		this.setState({ searchTerm: event.target.value });
+	}
+
+	HandleSearch(e) {
+		const { searchTerm } = this.state;
+		this.fetchTopstories(searchTerm, 0);
+		e.preventDefault();
 	}
 
 	onDismiss(id) {
@@ -38,6 +67,7 @@ class HackerNews extends Component {
 		const updatedHits = this.state.result.filter(isNotId);
 		this.setState({ result: updatedHits });
 	}
+
 
 	render() {
 		const { result, searchTerm } = this.state;
@@ -47,24 +77,32 @@ class HackerNews extends Component {
 			border-color: red;
 		`;
 
+		if (!result) {
+			return <BounceLoader css={override} size={80} color={"#123abc"} />;
+		}
+
 		return (
 			<div className="App">
-				<form>
-					<input
-						type="text"
-						value={searchTerm}
-						onChange={this.onSearchChange}
-					/>
-				</form>
-				{result ? (
+				<Search
+					searchTerm={searchTerm}
+					onHandleChange={this.HandleChange}
+					onHandleSearch={this.HandleSearch}
+				/>
+				{!result ? (
+					<BounceLoader css={override} size={80} color={"#123abc"} />
+				) : (
 					<Table
 						result={result}
 						searchTerm={searchTerm}
 						onDismiss={this.onDismiss}
 					/>
-				) : (
-					<BounceLoader css={override} size={80} color={"#123abc"} />
 				)}
+				<button type='button' onClick={this.handlePrev}>
+					Previous
+				</button>
+				<button type='button' onClick={this.handleNext}>
+					Next
+				</button>
 			</div>
 		);
 	}

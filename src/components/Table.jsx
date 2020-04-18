@@ -2,13 +2,10 @@ import React, { Component } from "react";
 
 class Table extends Component {
 	render() {
-		const { result, onDismiss, searchTerm } = this.props;
+		const { result, onDismiss } = this.props;
 		return (
 			<div>
 				{result
-					.filter((x) =>
-						x.title.toLowerCase().includes(searchTerm.toLowerCase())
-					)
 					.map((item) => (
 						<div key={item.objectID}>
 							<span>

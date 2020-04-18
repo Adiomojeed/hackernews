@@ -2,11 +2,16 @@ import React, { Component } from 'react'
 
 class Search extends Component {
     render() {
-        const {value, onSearchChange} = this.props
+        const {searchTerm, onHandleChange, onHandleSearch} = this.props
         return (
             <div>
-                <form>
-					<input type="text" value={value} onChange={onSearchChange} />
+                <form onSubmit={onHandleSearch}>
+					<input
+						type="text"
+						value={searchTerm}
+						onChange={onHandleChange}
+					/>
+                    <button type="submit">Search</button>
 				</form>
             </div>
         )
