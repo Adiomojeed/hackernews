@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
 import { css } from "@emotion/core";
+import axios from 'axios'
 import Table from "./Table";
 import Search from "./Search";
 
@@ -15,7 +16,7 @@ class HackerNews extends Component {
 		this.state = {
 			result: null,
 			searchTerm: DEFAULT_QUERY,
-			page: 0
+			page: 0,
 		};
 
 		this.setStory = this.setStory.bind(this);
@@ -31,9 +32,8 @@ class HackerNews extends Component {
 		this.setState({ result: result });
 	}
 	fetchTopstories(searchTerm, page) {
-		fetch(`${PATH}${searchTerm}&${PARAM_PAGE}${page}`)
-			.then((response) => response.json())
-			.then((result) => this.setStory(result.hits))
+		axios(`${PATH}${searchTerm}&${PARAM_PAGE}${page}`)
+			.then((result) => this.setStory(result.data.hits))
 			.catch((error) => error);
 	}
 	componentDidMount() {
@@ -70,7 +70,7 @@ class HackerNews extends Component {
 
 
 	render() {
-		const { result, searchTerm } = this.state;
+		const { result, searchTerm, error } = this.state;
 		const override = css`
 			display: block;
 			margin: 10px auto;
@@ -89,7 +89,10 @@ class HackerNews extends Component {
 					onHandleSearch={this.HandleSearch}
 				/>
 				{!result ? (
-					<BounceLoader css={override} size={80} color={"#123abc"} />
+					<React.Fragment>
+						<BounceLoader css={override} size={80} color={"#123abc"} />
+						<h1>error</h1>
+					</React.Fragment>
 				) : (
 					<Table
 						result={result}
