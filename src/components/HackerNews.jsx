@@ -60,6 +60,7 @@ class HackerNews extends Component {
 
 	HandleSearch(e) {
 		const { searchTerm } = this.state;
+		this.setState({result: null})
 		this.fetchTopstories(searchTerm, 0);
 		e.preventDefault();
 	}
@@ -74,15 +75,12 @@ class HackerNews extends Component {
 		const { result, searchTerm, error } = this.state;
 		const override = css`
 			display: block;
-			margin: 10px auto;
+			margin: 20px auto;
+			text-align: center;
 			border-color: #55efc4;
 			color: #55efc4;
+			max-width: 100%
 		`;
-
-		if (!result) {
-			return <BounceLoader css={override} size={80} color={"#123abc"} />;
-		}
-
 		return (
 			<div className="col">
 				<h1 className="hero-text">Hacker News</h1>
@@ -92,9 +90,9 @@ class HackerNews extends Component {
 					onHandleSearch={this.HandleSearch}
 				/>
 				{!result ? (
-					<React.Fragment>
-						<BounceLoader css={override} />
-					</React.Fragment>
+					
+						<BounceLoader css={override} size={80} color={"#55efc4"} />
+					
 				) : (
 					<React.Fragment>
 						<h2>Search Results...</h2>
