@@ -1,0 +1,40 @@
+table {
+	width: 100%;
+}
+
+tr {
+	border-bottom: 1px solid grey;
+}
+
+td {
+	width: 100%;
+}
+
+.horizontal-rule {
+	border-bottom: 1px solid #f1efef;
+	margin: 10px 20px;
+}
+
+.article--title {
+	font-size: 20px;
+	& a {
+		text-decoration: none;
+	}
+}
+
+.article--details {
+	margin-top: 10px;
+	color: $grey;
+}
+
+.article__info {
+	margin-right: 30px;
+}
+
+.btn--remove {
+	background-color: #fff;
+	color: $red;
+	border: 0;
+	font-size: 20px;
+	cursor: pointer;
+}

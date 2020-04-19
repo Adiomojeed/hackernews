@@ -7,7 +7,10 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"format": "prettier \"src/**/*.{html,jsx}\" --write",
 		"lint": "eslint \"src/**/*.{js,jsx}\" --quiet --fix",
-		"dev": "parcel src/index.html"
+		"dev": "parcel public/index.html",
+		"build": "parcel build public/index.html --out-dir docs --public-url ./",
+		"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build",
+		"start": "node server.js"
 	},
 	"keywords": [],
 	"author": "",
@@ -22,10 +25,12 @@
 		"eslint-plugin-react": "^7.19.0",
 		"eslint-plugin-react-hooks": "^3.0.0",
 		"parcel-bundler": "^1.12.4",
-		"prettier": "^2.0.4"
+		"prettier": "^2.0.4",
+		"node-sass": "^4.13.1"
 	},
 	"dependencies": {
 		"axios": "^0.19.2",
+		"express": "^4.17.1",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
 		"react-spinners": "^0.8.1"

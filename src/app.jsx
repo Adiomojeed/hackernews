@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import HackerNews from "./components/HackerNews";
+import "./styles/app.scss";
 
 class App extends Component {
 	constructor(props) {
@@ -10,8 +11,10 @@ class App extends Component {
 	}
 	render() {
 		return (
-			<div>
-				<HackerNews />
+			<div className="container">
+				<div className="row">
+					<HackerNews />
+				</div>
 			</div>
 		);
 	}

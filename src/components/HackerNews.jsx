@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import BounceLoader from "react-spinners/BounceLoader";
 import { css } from "@emotion/core";
-import axios from 'axios'
+import axios from "axios";
 import Table from "./Table";
 import Search from "./Search";
 
 const DEFAULT_QUERY = "react";
 const PATH = "https://hn.algolia.com/api/v1/search?query=";
-const PARAM_PAGE = "page="
+const PARAM_PAGE = "page=";
 
 class HackerNews extends Component {
 	constructor(props) {
@@ -24,8 +24,8 @@ class HackerNews extends Component {
 		this.HandleSearch = this.HandleSearch.bind(this);
 		this.HandleChange = this.HandleChange.bind(this);
 		this.onDismiss = this.onDismiss.bind(this);
-		this.handleNext = this.handleNext.bind(this)
-		this.handlePrev = this.handlePrev.bind(this)
+		this.handleNext = this.handleNext.bind(this);
+		this.handlePrev = this.handlePrev.bind(this);
 	}
 
 	setStory(result) {
@@ -40,16 +40,18 @@ class HackerNews extends Component {
 		const { searchTerm, page } = this.state;
 		this.fetchTopstories(searchTerm, page);
 	}
-	handleNext () {
-		const {searchTerm, page} = this.state
-		this.fetchTopstories(searchTerm, page+1)
-		this.setState({page: page+1})
+	handleNext() {
+		const { searchTerm, page } = this.state;
+		this.fetchTopstories(searchTerm, page + 1);
+		this.setState({ page: page + 1 });
+		window.scrollTo(0, 0);
 	}
-	handlePrev () {
-		const {searchTerm, page} = this.state
-		const newPage = page === 0 ? 0 : page-1
-		this.fetchTopstories(searchTerm, newPage)
-		this.setState({page: newPage})
+	handlePrev() {
+		const { searchTerm, page } = this.state;
+		const newPage = page === 0 ? 0 : page - 1;
+		this.fetchTopstories(searchTerm, newPage);
+		this.setState({ page: newPage });
+		window.scrollTo(0, 0);
 	}
 
 	HandleChange(event) {
@@ -68,13 +70,13 @@ class HackerNews extends Component {
 		this.setState({ result: updatedHits });
 	}
 
-
 	render() {
 		const { result, searchTerm, error } = this.state;
 		const override = css`
 			display: block;
 			margin: 10px auto;
-			border-color: red;
+			border-color: #55efc4;
+			color: #55efc4;
 		`;
 
 		if (!result) {
@@ -82,7 +84,8 @@ class HackerNews extends Component {
 		}
 
 		return (
-			<div className="App">
+			<div className="col">
+				<h1 className="hero-text">Hacker News</h1>
 				<Search
 					searchTerm={searchTerm}
 					onHandleChange={this.HandleChange}
@@ -90,22 +93,40 @@ class HackerNews extends Component {
 				/>
 				{!result ? (
 					<React.Fragment>
-						<BounceLoader css={override} size={80} color={"#123abc"} />
-						<h1>error</h1>
+						<BounceLoader css={override} />
 					</React.Fragment>
 				) : (
-					<Table
-						result={result}
-						searchTerm={searchTerm}
-						onDismiss={this.onDismiss}
-					/>
+					<React.Fragment>
+						<h2>Search Results...</h2>
+						<table>
+							<Table
+								result={result}
+								searchTerm={searchTerm}
+								onDismiss={this.onDismiss}
+							/>
+						</table>
+					</React.Fragment>
 				)}
-				<button type='button' onClick={this.handlePrev}>
-					Previous
-				</button>
-				<button type='button' onClick={this.handleNext}>
-					Next
-				</button>
+				<div className="footer">
+					<button
+						type="button"
+						onClick={this.handlePrev}
+						className="pagination"
+					>
+						<i className="fas fa-long-arrow-alt-left"></i>
+					</button>
+					<button
+						type="button"
+						onClick={this.handleNext}
+						className="pagination"
+					>
+						<i className="fas fa-long-arrow-alt-right"></i>
+					</button>
+				</div>
+				<footer>
+					<i className="fas fa-code"></i> with{" "}
+					<i className="fas fa-heart"></i> by codeLeaf&#128640;
+				</footer>
 			</div>
 		);
 	}
