@@ -9,11 +9,11 @@ class Search extends Component {
 					<input
 						type="text"
 						value={searchTerm}
-						className="form-control"
+						className="form-control datalist"
 						onChange={onHandleChange}
 						list="languages"
 					/>
-					<datalist id="languages">
+					<datalist id="languages" className="datalist">
 						<option value="react">react</option>
 						<option value="redux">javascript</option>
 						<option value="javascript">javascript</option>
