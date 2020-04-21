@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 
 class Search extends Component {
+	componentDidMount () {
+		if (this.input) {
+			this.input.focus()
+		}
+	}
 	render() {
 		const { searchTerm, onHandleChange, onHandleSearch } = this.props;
 		return (
@@ -12,6 +17,7 @@ class Search extends Component {
 						className="form-control datalist"
 						onChange={onHandleChange}
 						list="languages"
+						ref={el => this.input = el}
 					/>
 					<datalist id="languages" className="datalist">
 						<option value="react">react</option>

@@ -6,8 +6,8 @@ class Table extends Component {
 		return (
 			<div className="table">
 				{result.map((item) => (
-					<React.Fragment>
-						<tr key={item.objectID}>
+					<React.Fragment key={item.objectID}>
+						<tr>
 							<td className="news__details">
 								<div className="article--title">
 									<a href={item.url}>{item.title}</a>
@@ -37,27 +37,8 @@ class Table extends Component {
 								</button>
 							</td>
 						</tr>
-						<div className="horizontal-rule"></div>
+						<span className="horizontal-rule"></span>
 					</React.Fragment>
-
-					//<div key={item.objectID}>
-					//	<span>
-					//		<a href={item.url}>{item.title}</a>
-					//	</span>
-					//	<span>{item.author}</span>
-					//	<span>{item.num_comments}...</span>
-					//	<span>{item.points}</span>
-					//	<span>
-					//		<button
-					//			onClick={() =>
-					//				onDismiss(item.objectID)
-					//			}
-					//			type="button"
-					//		>
-					//			Dismiss
-					//		</button>
-					//	</span>
-					//</div>
 				))}
 			</div>
 		);

@@ -16,6 +16,7 @@ class HackerNews extends Component {
 		this.state = {
 			result: null,
 			searchTerm: DEFAULT_QUERY,
+			searchKey: "",
 			page: 0,
 		};
 
@@ -29,7 +30,9 @@ class HackerNews extends Component {
 	}
 
 	setStory(result) {
-		this.setState({ result: result });
+		this.setState({ result: {
+			[this.state.searchKey]: {result}
+		} });
 	}
 	fetchTopstories(searchTerm, page) {
 		axios(`${PATH}${searchTerm}&${PARAM_PAGE}${page}`)
@@ -37,9 +40,16 @@ class HackerNews extends Component {
 			.catch((error) => error);
 	}
 	componentDidMount() {
-		const { searchTerm, page } = this.state;
+		const { searchTerm, page, result, searchKey } = this.state;
+		this.setState({ searchKey: searchTerm });
 		this.fetchTopstories(searchTerm, page);
+		console.log(result);
 	}
+
+	componentDidUpdate() {
+		console.log(this.state.result);
+	}
+
 	handleNext() {
 		const { searchTerm, page } = this.state;
 		this.fetchTopstories(searchTerm, page + 1);
@@ -60,7 +70,7 @@ class HackerNews extends Component {
 
 	HandleSearch(e) {
 		const { searchTerm } = this.state;
-		this.setState({result: null})
+		this.setState({ result: null, searchKey: searchTerm });
 		this.fetchTopstories(searchTerm, 0);
 		e.preventDefault();
 	}
@@ -72,14 +82,14 @@ class HackerNews extends Component {
 	}
 
 	render() {
-		const { result, searchTerm, error } = this.state;
+		const { result, searchTerm, error, searchKey } = this.state;
 		const override = css`
 			display: block;
 			margin: 20px auto;
 			text-align: center;
 			border-color: #55efc4;
 			color: #55efc4;
-			max-width: 100%
+			max-width: 100%;
 		`;
 		return (
 			<div className="col">
@@ -90,9 +100,7 @@ class HackerNews extends Component {
 					onHandleSearch={this.HandleSearch}
 				/>
 				{!result ? (
-					
-						<BounceLoader css={override} size={80} color={"#55efc4"} />
-					
+					<BounceLoader css={override} size={80} color={"#55efc4"} />
 				) : (
 					<React.Fragment>
 						<h2>Search Results...</h2>
