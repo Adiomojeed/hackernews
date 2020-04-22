@@ -8,7 +8,7 @@
 		"plugin:jsx-a11y/recommended",
 		"plugin:react-hooks/recommended"
 	],
-	"plugins": ["import", "jsx-a11y", "react"],
+	"plugins": ["import", "jsx-a11y", "react", "@babel/plugin-proposal-class-properties"],
 	"parserOptions": {
 		"ecmaVersion": 2020,
 		"sourceType": "module",
@@ -23,7 +23,8 @@
 	},
 	"rules": {
         "no-var": 2,
-        "no-console": 0
+		"no-console": 0,
+		"react/classProperties": 0
 	},
 	"settings": {
 		"react": {
