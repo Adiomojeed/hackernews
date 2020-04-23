@@ -10,9 +10,8 @@ const PATH = "https://hn.algolia.com/api/v1/search?query=";
 const PARAM_PAGE = "page=";
 
 class HackerNews extends Component {
-
 	_isMounted = false;
-	
+
 	constructor(props) {
 		super(props);
 
@@ -23,7 +22,6 @@ class HackerNews extends Component {
 			page: 0,
 		};
 
-		
 		this.setStory = this.setStory.bind(this);
 		this.fetchTopstories = this.fetchTopstories.bind(this);
 		this.HandleSearch = this.HandleSearch.bind(this);
@@ -35,7 +33,7 @@ class HackerNews extends Component {
 
 	setStory(result) {
 		const { searchKey, results } = this.state;
-		const {hits, page} = result
+		const { hits, page } = result;
 		this.setState({
 			results: {
 				...results,
@@ -47,16 +45,20 @@ class HackerNews extends Component {
 		axios(`${PATH}${searchTerm}&${PARAM_PAGE}${page}`)
 			.then((result) => {
 				if (this._isMounted) {
-					this.setStory(result.data)
+					this.setStory(result.data);
 				}
 			})
 			.catch((error) => error);
 	}
 	componentDidMount() {
-		this._isMounted = true
+		this._isMounted = true;
 		const { searchTerm, page, result, searchKey } = this.state;
 		this.setState({ searchKey: searchTerm });
 		this.fetchTopstories(searchTerm, page);
+	}
+
+	componentDidUpdate () {
+		console.log(this.state.results)
 	}
 
 	componentWillUnmount() {
@@ -64,7 +66,8 @@ class HackerNews extends Component {
 	}
 
 	handleNext() {
-		const { searchTerm, page } = this.state;
+		const { searchTerm, page, results } = this.state;
+		this.setState({ searchKey: searchTerm, results: { ...results }, page: page + 1 });
 		this.fetchTopstories(searchTerm, page + 1);
 		this.setState({ page: page + 1 });
 		window.scrollTo(0, 0);
@@ -83,24 +86,26 @@ class HackerNews extends Component {
 
 	HandleSearch(e) {
 		const { searchTerm, results } = this.state;
-		this.setState({ searchKey: searchTerm, results: {...results} });
+		this.setState({ searchKey: searchTerm, results: { ...results } });
 		this.fetchTopstories(searchTerm, 0);
 		e.preventDefault();
 	}
 
 	onDismiss(id) {
+		const {searchKey, results} = this.state
 		const isNotId = (item) => item.objectID !== id;
-		const updatedHits = this.state.result.filter(isNotId);
-		this.setState({ result: updatedHits });
+		const updatedHits = results[searchKey]['hits'].filter(isNotId);
+		console.log(updatedHits)
+		this.setState({ results: {
+			...results,
+			[searchKey]: {hits: updatedHits, page: [searchKey].page}
+		} });
 	}
 
 	render() {
 		const { results, searchTerm, error, searchKey } = this.state;
-		const actualResult = (
-			results &&
-			results[searchKey] &&
-			results[searchKey]['hits']
-		  ) || [];
+		const actualResult =
+			(results && results[searchKey] && results[searchKey]["hits"]) || [];
 		const override = css`
 			display: block;
 			margin: 20px auto;
